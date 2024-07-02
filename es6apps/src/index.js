@@ -1,23 +1,54 @@
+// function getStock() {
+//     return {
+//         id: 1,
+//         symbol: 'google',
+//         qty: 10,
+//         price: 100
+//     }
+// }
+// console.log(getStock())
 
-function increase() {
+// function getStock(id = 1, symbol = 'google', qty = 10, price = 100) {
+//     return {
+//         id: id,
+//         symbol: symbol,
+//         qty: qty,
+//         price: price
+//     }
+// }
+// console.log(getStock())
+// console.log(getStock(2,'microsoft',200,400))
 
-    return function () {
-        console.log('increase')
-    }
-}
-let myfun = increase()
-myfun()
+// function getStock(id = 1, symbol = 'google', qty = 10, price = 100) {
+//     //key:value
+//     //if key and value is same , remove any one
+//     return {
+//         id,
+//         symbol,
+//         qty,
+//         price
+//     }
+// }
+// console.log(getStock())
+// console.log(getStock(2, 'microsoft', 200, 400))
 
+// const getStock = (id = 1, symbol = 'google', qty = 10, price = 100) => {
+//     //key:value
+//     //if key and value is same , remove any one
+//     return {
+//         id,
+//         symbol,
+//         qty,
+//         price
+//     }
+// }
 
-let decrease = () => {
-    return () => {
-        console.log('decrease')
-    }
-}
-let myfun1 = decrease()
-myfun1()
+const getStock = (id = 1, symbol = 'google', qty = 10, price = 100) => ({
+    id,
+    symbol,
+    qty,
+    price
+})
 
-decrease = () => () => console.log('decrease')
-
-let myfun3 = decrease()
-myfun3()
+console.log(getStock())
+console.log(getStock(2, 'microsoft', 200, 400))
