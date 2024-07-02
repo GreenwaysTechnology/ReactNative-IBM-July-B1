@@ -1,54 +1,11 @@
-// function getStock() {
-//     return {
-//         id: 1,
-//         symbol: 'google',
-//         qty: 10,
-//         price: 100
-//     }
-// }
-// console.log(getStock())
+import { firstName, lastName, skills, address } from "./util.js";
+import App from "./App.js";
+import AIBot, { version, name } from "./lib.js";
 
-// function getStock(id = 1, symbol = 'google', qty = 10, price = 100) {
-//     return {
-//         id: id,
-//         symbol: symbol,
-//         qty: qty,
-//         price: price
-//     }
-// }
-// console.log(getStock())
-// console.log(getStock(2,'microsoft',200,400))
-
-// function getStock(id = 1, symbol = 'google', qty = 10, price = 100) {
-//     //key:value
-//     //if key and value is same , remove any one
-//     return {
-//         id,
-//         symbol,
-//         qty,
-//         price
-//     }
-// }
-// console.log(getStock())
-// console.log(getStock(2, 'microsoft', 200, 400))
-
-// const getStock = (id = 1, symbol = 'google', qty = 10, price = 100) => {
-//     //key:value
-//     //if key and value is same , remove any one
-//     return {
-//         id,
-//         symbol,
-//         qty,
-//         price
-//     }
-// }
-
-const getStock = (id = 1, symbol = 'google', qty = 10, price = 100) => ({
-    id,
-    symbol,
-    qty,
-    price
-})
-
-console.log(getStock())
-console.log(getStock(2, 'microsoft', 200, 400))
+function main() {
+    console.log(firstName, lastName, skills, address)
+    console.log(App())
+    new AIBot()
+    console.log(version, name)
+}
+main()
