@@ -706,8 +706,54 @@ const Welcome = () => {
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(<Welcome />)
+..................................................................................
+			Component Composition
+..................................................................................
+
+I have ui called gallery, inside Gallary i want to display Profile information.
+
+Level - 1:
+import ReactDOM from 'react-dom/client'
+
+const Gallery = () => {
+    return <div>
+        <h1>Scientists / Computer</h1>
+        <h3>Alan Turing</h3>
+        <h4>Born : 23 June 1912</h4>
+        <h4>Died : 7 June 1954 (aged 41)
+            Wilmslow, Cheshire, England
+        </h4>
+    </div>
+}
 
 
+ReactDOM.createRoot(document.getElementById('root')).render(<Gallery />)
+
+Here scientists information is tightly coupled with Gallery.
+
+import ReactDOM from 'react-dom/client'
+
+const ProfileHeading = () => <h1>Scientists / Computer</h1>
+
+const Profile = () => {
+    return <>
+        <ProfileHeading />
+        <h3>Alan Turing</h3>
+        <h4>Born : 23 June 1912</h4>
+        <h4>Died : 7 June 1954 (aged 41)
+            Wilmslow, Cheshire, England
+        </h4>
+    </>
+}
+
+const Gallery = () => {
+    return <div>
+        <Profile />
+    </div>
+}
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(<Gallery />)
 
 
 

@@ -1,29 +1,23 @@
 import ReactDOM from 'react-dom/client'
-// import React, { Fragment } from 'react'
 
-// const Welcome = () => {
-//     return <React.Fragment>
-//         <h1>Welcome to IBM</h1>
-//         <p>Hello</p>
-//     </React.Fragment>
+const ProfileHeading = () => <h1>Scientists / Computer</h1>
 
-// }
-
-
-// const Welcome = () => {
-//     return <Fragment>
-//         <h1>Welcome to IBM</h1>
-//         <p>Hello</p>
-//     </Fragment>
-
-// }
-const Welcome = () => {
+const Profile = () => {
     return <>
-        <h1>Welcome to IBM</h1>
-        <p>Hello</p>
+        <ProfileHeading />
+        <h3>Alan Turing</h3>
+        <h4>Born : 23 June 1912</h4>
+        <h4>Died : 7 June 1954 (aged 41)
+            Wilmslow, Cheshire, England
+        </h4>
     </>
+}
 
+const Gallery = () => {
+    return <div>
+        <Profile />
+    </div>
 }
 
 
-ReactDOM.createRoot(document.getElementById('root')).render(<Welcome />)
+ReactDOM.createRoot(document.getElementById('root')).render(<Gallery />)
