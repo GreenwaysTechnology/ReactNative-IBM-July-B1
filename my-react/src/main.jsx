@@ -1,23 +1,55 @@
+import React from 'react'
 import ReactDOM from 'react-dom/client'
+import './index.css'
+import './App.css'
 
-const ProfileHeading = () => <h1>Scientists / Computer</h1>
+const User = ({ imageSrc, id, userName, mail, status }) => <div>
+    <img className="logo" src={imageSrc} alt='Your Image' />
+    <h1 style={styles.heading}>{id}</h1>
+    <p style={{color:'blue'}}>{userName}</p>
+    <p>{mail}</p>
+    <p>{status ? "Available" : "Not Available"}</p>
+</div>
+//styles object
+const styles = {
+    heading: {
+        color: 'red',
+        fontStyle: 'italic',
+        fontFamily: 'Charcoal',
+        border: 'thick solid #0000FF',
+        borderRadius: '25px'
+    }
+}
 
-const Profile = () => {
+//default Props
+User.defaultProps = {
+    userName: 'Your Name',
+    id: 0,
+    status: false,
+    mail: 'something@yourdomain.com',
+    imageSrc: 'https://i.imgur.com/7vQD0fPs.jpg'
+}
+
+
+const App = () => {
+    const userName = 'Subramanian Murugan'
+    const mail = 'sasubramanian_md@hotmail.com'
+    const id = 1
+    const imageSrc = 'https://i.imgur.com/7vQD0fPs.jpg'
     return <>
-        <ProfileHeading />
-        <h3>Alan Turing</h3>
-        <h4>Born : 23 June 1912</h4>
-        <h4>Died : 7 June 1954 (aged 41)
-            Wilmslow, Cheshire, England
-        </h4>
+        <User userName={userName} id={id} mail={mail} status={true} imageSrc={imageSrc} />
+        <hr />
+        <User />
+        <User id={2} userName={"Murugan"} />
+
     </>
-}
 
-const Gallery = () => {
-    return <div>
-        <Profile />
-    </div>
 }
 
 
-ReactDOM.createRoot(document.getElementById('root')).render(<Gallery />)
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+)

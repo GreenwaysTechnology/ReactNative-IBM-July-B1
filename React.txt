@@ -435,7 +435,7 @@ JSX compilation model:
 	----------------------------------------- -- Excution cycles Starts
   Runtime : React Engine  compiled code feed into react engine
 			|
-		     Excute compiled js code : function calls
+		   Excute compiled js code : function calls
 			|
 	     create virtual Object tree (in browser V-dom)
 		        |
@@ -754,6 +754,446 @@ const Gallery = () => {
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(<Gallery />)
+.....................................................................................
+.....................................................................................
+			 React Dev tool
+.....................................................................................
+
+It is tool part of browser as plugin, used to insepect the structure of app.
+https://react.dev/learn/react-developer-tools
+
+.....................................................................................
+.....................................................................................
+		  Component Composition and Modularity
+.....................................................................................
+Every Component will go into separate folders and files, through es 6 modules you can import export components..
+
+src/profile/Profile.jsx
+
+import { ProfileHeading } from "./ProfileHeading"
+
+const Profile = () => {
+    return <>
+        <ProfileHeading />
+        <h3>Alan Turing</h3>
+        <h4>Born : 23 June 1912</h4>
+        <h4>Died : 7 June 1954 (aged 41)
+            Wilmslow, Cheshire, England
+        </h4>
+    </>
+}
+export { Profile }
+
+
+src/gallery/Gallery.jsx
+
+import { Profile } from "../profile/Profile"
+
+const Gallery = () => {
+    return <div>
+        <Profile />
+    </div>
+}
+export { Gallery } 
+
+
+src/App.jsx
+import { Gallery } from "./gallery/Gallery"
+
+function App() {
+
+  return (
+    <>
+      <Gallery />
+    </>
+  )
+}
+
+export default App
+
+
+src/main.jsx
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import App from './App.jsx'
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
+..................................................................................
+			Barrel Export
+..................................................................................
+
+src/welcome/
+   Hello.jsx
+   Hai.jsx
+   Greeter.jsx
+
+when you import these files where ever, we have to import 
+		 
+import { Hello } from "./welcome/Hello"
+import { Hai } from "./welcome/Hai"
+import { Greeter } from "./welcome/Greeter"
+
+Barrel export is nothing simplifiying export and import...
+ Using Barrel export you dont need to use fileName when import
+ Using Barrel export you dont need to use multiple import statement.
+
+How to use barrel export?
+
+Rule 1:
+ inside folder create "index.js"
+ src/profile/index.js 
+
+Rule 2:
+ inside index.js
+  
+ import {Profile} './Profile'
+
+ export {Profile}
+
+Rule 3: 
+  inside another file like gallary.jsx
+
+  import {Profile} './profile'
+
+....................................................................................
+                     Data Binding
+....................................................................................
+As of now we have seen only how to create static UI - (only HTML)
+
+How to represent data?
+->primitives - string,numbers,boolean
+->objects - object,arrays
+
+How to bind data?
+  {variable} {expression}
+ 
+  {a} {fun()} {10*2} {isHidden ? 'Show':'Hide'} 
+
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+
+const User = ()=>{
+    const userName = 'Subramanian Murugan'
+    const mail = 'sasubramanian_md@hotmail.com'
+    const status = true
+    const id = 1
+    const imageSrc='https://i.imgur.com/7vQD0fPs.jpg'
+
+    return <div>
+            <img src={imageSrc} alt='Your Image' />
+            <h1>{id}</h1>
+            <p>{userName}</p>
+            <p>{mail}</p>
+            <p>{status ? "Available" : "Not Available"}</p>
+    </div>
+}
+
+const App = ()=> {
+    return <User/>
+}
+
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>,
+)
+..................................................................................
+			   Data Binding Patterns
+
+1.property binding aka props pattern
+2.State binding aka state pattern.
+
+
+props Pattern:
+
+When you think about component , you should thing about resuablity..
+
+How to create component with resuablity?
+
+ Component should be configurable, Component should accept data from outside.
+
+if data is passed to the component from outside(From another component -Parent),
+This pattern is called props pattern /Property pattern.
+
+Since Component is function, function can take args (which is called property).
+
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+
+//props is just variable holding all parameters
+//props value is just object
+const User = (props) => {
+    console.log(props)
+    return <div>
+        <img src={props.imageSrc} alt='Your Image' />
+        <h1>{props.id}</h1>
+        <p>{props.userName}</p>
+        <p>{props.mail}</p>
+        <p>{props.status ? "Available" : "Not Available"}</p>
+    </div>
+}
+
+const App = () => {
+    const userName = 'Subramanian Murugan'
+    const mail = 'sasubramanian_md@hotmail.com'
+    const id = 1
+    const imageSrc = 'https://i.imgur.com/7vQD0fPs.jpg'
+    // userName,id,mail are parameters
+    return <>
+        <User userName={userName} id={id} mail={mail} status={true} imageSrc={imageSrc} />
+        <User userName={"Ram"} id={2} mail={"ram@gmail.com"} status={true} imageSrc={imageSrc} />
+        <User userName={"Ram"} id={3} mail={"ram@gmail.com"} status={true} imageSrc={imageSrc} />
+        <User userName={"Ram"} id={4} mail={"ram@gmail.com"} status={true} imageSrc={imageSrc} />
+        <User userName={"Ram"} id={5} mail={"ram@gmail.com"} status={true} imageSrc={imageSrc} />
+        <User userName={"Ram"} id={6} mail={"ram@gmail.com"} status={true} imageSrc={imageSrc} />
+    </>
+
+}
+
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+)
+.....................................................................................
+			 Object destructuring with props
+.....................................................................................
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+
+// const User = (props) => {
+//     const { imageSrc, id, userName, mail, status } = props
+//     return <div>
+//         <img src={imageSrc} alt='Your Image' />
+//         <h1>{id}</h1>
+//         <p>{userName}</p>
+//         <p>{mail}</p>
+//         <p>{status ? "Available" : "Not Available"}</p>
+//     </div>
+// }
+const User = ({ imageSrc, id, userName, mail, status }) => <div>
+    <img src={imageSrc} alt='Your Image' />
+    <h1>{id}</h1>
+    <p>{userName}</p>
+    <p>{mail}</p>
+    <p>{status ? "Available" : "Not Available"}</p>
+</div>
+
+
+const App = () => {
+    const userName = 'Subramanian Murugan'
+    const mail = 'sasubramanian_md@hotmail.com'
+    const id = 1
+    const imageSrc = 'https://i.imgur.com/7vQD0fPs.jpg'
+    // userName,id,mail are parameters
+    return <>
+        <User userName={userName} id={id} mail={mail} status={true} imageSrc={imageSrc} />
+        <User userName={"Ram"} id={2} mail={"ram@gmail.com"} status={true} imageSrc={imageSrc} />
+        <User userName={"Ram"} id={3} mail={"ram@gmail.com"} status={true} imageSrc={imageSrc} />
+        <User userName={"Ram"} id={4} mail={"ram@gmail.com"} status={true} imageSrc={imageSrc} />
+        <User userName={"Ram"} id={5} mail={"ram@gmail.com"} status={true} imageSrc={imageSrc} />
+        <User userName={"Ram"} id={6} mail={"ram@gmail.com"} status={true} imageSrc={imageSrc} />
+    </>
+
+}
+
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+)
+...................................................................................
+				 Default Props
+....................................................................................
+When you design component , you must pass default properties so that we can avoid
+many bugs during runtime.
+
+How to set default props?
+
+ComponentName.defaultProps= {
+ propName:value
+}
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+
+const User = ({ imageSrc, id, userName, mail, status }) => <div>
+    <img src={imageSrc} alt='Your Image' />
+    <h1>{id}</h1>
+    <p>{userName}</p>
+    <p>{mail}</p>
+    <p>{status ? "Available" : "Not Available"}</p>
+</div>
+
+//default Props
+User.defaultProps = {
+    userName: 'Your Name',
+    id: 0,
+    status: false,
+    mail: 'something@yourdomain.com',
+    imageSrc: 'https://i.imgur.com/7vQD0fPs.jpg'
+}
+
+
+const App = () => {
+    const userName = 'Subramanian Murugan'
+    const mail = 'sasubramanian_md@hotmail.com'
+    const id = 1
+    const imageSrc = 'https://i.imgur.com/7vQD0fPs.jpg'
+    return <>
+        <User userName={userName} id={id} mail={mail} status={true} imageSrc={imageSrc} />
+        <hr />
+        <User />
+        <User id={2} userName={"Murugan"} />
+
+    </>
+
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+)
+.....................................................................................
+
+
+CSS 
+
+What is CSS?
+ language - Styling language - DSL and declarative
+ to design web pages
+
+
+
+How to use css?
+
+two ways
+
+using css language directly -  css selectors
+<h1 class="selector">
+
+inline style
+<h1 style="color:red">
+ -static css
+
+using css via javascript
+  - dynamic css
+
+<h1 id="heading">hello</h1>
+
+let heading= document.getElementById("heading")
+heading.style.color='red'
+//text-align: center;
+heading.style.textAlign='center'
+
+
+React uses two types of styling
+
+1.css classes
+2.css style - inline styles
+
+You can use any css framework for styling.
+Even you can write your own css also...
+
+React html attribute syntax:
+............................
+
+<div class="className">
+
+</div>
+
+class is html attribute.
+
+In React we cant add html attributes directly, we need to follow jsx notation/naming starndard - camelCase
+
+
+<div className="class">
+
+</div>
+
+HTML ATTRIBUTES
+
+accept acceptCharset accessKey action allowFullScreen alt async autoComplete
+autoFocus autoPlay capture cellPadding cellSpacing challenge charSet checked
+cite classID className colSpan cols content contentEditable contextMenu controls
+controlsList coords crossOrigin data dateTime default defer dir disabled
+download draggable encType form formAction formEncType formMethod formNoValidate
+formTarget frameBorder headers height hidden high href hrefLang htmlFor
+httpEquiv icon id inputMode integrity is keyParams keyType kind label lang list
+loop low manifest marginHeight marginWidth max maxLength media mediaGroup method
+min minLength multiple muted name noValidate nonce open optimum pattern
+placeholder poster preload profile radioGroup readOnly rel required reversed
+role rowSpan rows sandbox scope scoped scrolling seamless selected shape size
+sizes span spellCheck src srcDoc srcLang srcSet start step style summary
+tabIndex target title type useMap value width wmode wrap
+onClick
+
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './index.css'
+import './App.css'
+
+const User = ({ imageSrc, id, userName, mail, status }) => <div>
+    <img className="logo" src={imageSrc} alt='Your Image' />
+    <h1 style={styles.heading}>{id}</h1>
+    <p style={{color:'blue'}}>{userName}</p>
+    <p>{mail}</p>
+    <p>{status ? "Available" : "Not Available"}</p>
+</div>
+//styles object
+const styles = {
+    heading: {
+        color: 'red',
+        fontStyle: 'italic',
+        fontFamily: 'Charcoal',
+        border: 'thick solid #0000FF',
+        borderRadius: '25px'
+    }
+}
+
+//default Props
+User.defaultProps = {
+    userName: 'Your Name',
+    id: 0,
+    status: false,
+    mail: 'something@yourdomain.com',
+    imageSrc: 'https://i.imgur.com/7vQD0fPs.jpg'
+}
+
+
+const App = () => {
+    const userName = 'Subramanian Murugan'
+    const mail = 'sasubramanian_md@hotmail.com'
+    const id = 1
+    const imageSrc = 'https://i.imgur.com/7vQD0fPs.jpg'
+    return <>
+        <User userName={userName} id={id} mail={mail} status={true} imageSrc={imageSrc} />
+        <hr />
+        <User />
+        <User id={2} userName={"Murugan"} />
+
+    </>
+
+}
+
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+)
+
 
 
 
