@@ -30,10 +30,13 @@ const todoList = [{
 
 ]
 
+// const Item = props => {
+//     const { name, status } = props.todo
+//     //using Tenary Operator
+//     return status ? <li>{name} ✔</li> : <li>{name} X </li>
+// }
 
-// const Item = ({ todo: { name, status } }) => status ? <li>{name} ✔</li> : <li>{name} X </li>
-
-const Item = ({ todo: { name, status } }) => <li> {name} {status && '✔'}</li>
+const Item = ({ todo: { name, status } }) => status ? <li>{name} ✔</li> : <li>{name} X </li>
 
 const TodoList = props => {
     return <>

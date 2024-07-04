@@ -30,11 +30,15 @@ const todoList = [{
 
 ]
 
-
-// const Item = ({ todo: { name, status } }) => status ? <li>{name} ✔</li> : <li>{name} X </li>
-
-const Item = ({ todo: { name, status } }) => <li> {name} {status && '✔'}</li>
-
+const Item = props => {
+    const { name, status } = props.todo
+    //using if condition
+    if (status) {
+        return <li>{name} ✔</li>
+    } else {
+        return <li>{name} X </li>
+    }
+}
 const TodoList = props => {
     return <>
         <ul>

@@ -1186,6 +1186,40 @@ const App = () => {
 
 }
 
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+)
+....................................................................................
+			  List rendering
+...................................................................................
+
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './index.css'
+
+const List = ({ names }) => {
+    return <>
+        <ul>
+           {
+             names.map(name=>{
+                return <li>{name}</li>
+             })
+           }
+        </ul>
+    </>
+}
+
+
+const App = () => {
+    const names = ["Subramanian", "Murugan", "Arun", "Karthik"]
+    return <>
+        <List names={names} />
+    </>
+
+}
+
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -1193,6 +1227,368 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <App />
     </React.StrictMode>,
 )
+....................................................................................
+			 Rendering Object List
+....................................................................................
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './index.css'
+import TODOS from './mock-data/todos'
+
+const TodoList = ({ todos }) => {
+    return <>
+        <div>
+            {
+                todos.map(todo => {
+                    return <section key={todo.id}>
+                        <h1>{todo.id} - {todo.userId}</h1>
+                        <h3>{todo.title}</h3>
+                        <h3>{todo.completed ? "Yes" : "No"}</h3>
+                    </section>
+                })
+            }
+        </div>
+    </>
+}
+
+
+const App = () => {
+    return <>
+        <TodoList todos={TODOS} />
+    </>
+
+}
+
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+)
+....................................................................................
+			How to break up list component
+...................................................................................
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './index.css'
+import TODOS from './mock-data/todos'
+
+const TodoListItem = ({ todo: { id, userId, title, completed } }) => <>
+    <h1>{id} - {userId}</h1>
+    <h3>{title}</h3>
+    <h3>{completed ? "Yes" : "No"}</h3>
+</>
+
+const TodoList = ({ todos }) => {
+    return <>
+        <div>
+            {
+                todos.map(todo => {
+                    return <section key={todo.id}>
+                        <TodoListItem todo={todo} />
+                    </section>
+                })
+            }
+        </div>
+    </>
+}
+
+
+const App = () => {
+    return <>
+        <TodoList todos={TODOS} />
+    </>
+
+}
+
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+)
+
+....................................................................................
+			 key-prop
+....................................................................................
+
+key prop is built in react prop ,used by react engine to optimize the list rendering..
+
+react-jsx-dev-runtime.development.js:87 Warning: Each child in a list should have a unique "key" prop.
+
+      <ul>
+            {
+                data.map(post => {
+                    return <li key={post.id}>{post.title}</li>
+                })
+            }
+        </ul>
+
+....................................................................................
+			Conditional Rendering
+....................................................................................
+How to introduce if ...else and also tenary operator in jsx?
+
+Your components will often need to display different things depending on different conditions.
+
+In React, you can conditionally render jsx using javascript syntax like if statement ,&& and ?: operator..
+
+Returning different JSX(Component) depending on condition.
+
+
+Use case : using if..else how to render components
+
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './index.css'
+
+const todoList = [{
+    id: 1,
+    name: 'learn react',
+    status: true
+},
+{
+    id: 2,
+    name: 'Learn next',
+    status: false
+},
+{
+    id: 3,
+    name: 'learn es',
+    status: true
+},
+{
+    id: 4,
+    name: 'learn Angular',
+    status: false
+},
+{
+    id: 5,
+    name: 'learn React Native',
+    status: false
+}
+
+]
+
+const Item = props => {
+    const { name, status } = props.todo
+    //using if condition
+    if (status) {
+        return <li>{name} ✔</li>
+    } else {
+        return <li>{name} X </li>
+    }
+}
+const TodoList = props => {
+    return <>
+        <ul>
+            {
+                props.todos.map(todo => {
+                    return <>
+                        <Item todo={todo} />
+                    </>
+                })
+            }
+        </ul>
+    </>
+}
+const App = () => {
+    return <>
+        <TodoList todos={todoList} />
+    </>
+
+}
+
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+)
+
+Use case: COnditional rendering using Tenary Operator
+
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './index.css'
+
+const todoList = [{
+    id: 1,
+    name: 'learn react',
+    status: true
+},
+{
+    id: 2,
+    name: 'Learn next',
+    status: false
+},
+{
+    id: 3,
+    name: 'learn es',
+    status: true
+},
+{
+    id: 4,
+    name: 'learn Angular',
+    status: false
+},
+{
+    id: 5,
+    name: 'learn React Native',
+    status: false
+}
+
+]
+
+// const Item = props => {
+//     const { name, status } = props.todo
+//     //using Tenary Operator
+//     return status ? <li>{name} ✔</li> : <li>{name} X </li>
+// }
+
+const Item = ({ todo: { name, status } }) => status ? <li>{name} ✔</li> : <li>{name} X </li>
+
+const TodoList = props => {
+    return <>
+        <ul>
+            {
+                props.todos.map(todo => {
+                    return <>
+                        <Item todo={todo} />
+                    </>
+                })
+            }
+        </ul>
+    </>
+}
+const App = () => {
+    return <>
+        <TodoList todos={todoList} />
+    </>
+
+}
+
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+)
+
+Use case: Conditional Rendering using && Operator:
+
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './index.css'
+
+const todoList = [{
+    id: 1,
+    name: 'learn react',
+    status: true
+},
+{
+    id: 2,
+    name: 'Learn next',
+    status: false
+},
+{
+    id: 3,
+    name: 'learn es',
+    status: true
+},
+{
+    id: 4,
+    name: 'learn Angular',
+    status: false
+},
+{
+    id: 5,
+    name: 'learn React Native',
+    status: false
+}
+
+]
+
+
+// const Item = ({ todo: { name, status } }) => status ? <li>{name} ✔</li> : <li>{name} X </li>
+
+const Item = ({ todo: { name, status } }) => <li> {name} {status && '✔'}</li>
+
+const TodoList = props => {
+    return <>
+        <ul>
+            {
+                props.todos.map(todo => {
+                    return <>
+                        <Item todo={todo} />
+                    </>
+                })
+            }
+        </ul>
+    </>
+}
+const App = () => {
+    return <>
+        <TodoList todos={todoList} />
+    </>
+
+}
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+)
+.....................................................................................
+				What can be prop
+.....................................................................................
+
+1.Prop can be data
+2.Prop can another component or element
+..
+3.Prop can be function
+4.Prop can be state(dynamic prop)
+
+
+
+1.Prop can another component or element.
+
+How to render component
+
+ <Grid></Grid> -  Grid can have children: passing prop
+ <Grid/> -  Grid has no children
+ 
+Parent-Child Relation ship:
+
+cont A = ()=>{
+  return <B/>
+}
+Parent-Child Relation ship:
+ via props
+
+<Layout> -parent
+	<Page>-child
+		<Header> -child
+		   <Logo> -child
+
+		   </Image>
+		</Header>
+	</Page>
+</Layout>  
+
+
+
+
+
+
+
+
+
 
 
 
