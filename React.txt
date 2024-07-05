@@ -1580,9 +1580,1277 @@ Parent-Child Relation ship:
 		</Header>
 	</Page>
 </Layout>  
+.....................................................................................
+			Component as Prop
+
+.....................................................................................
+
+Use case : Without component as prop.
+
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './index.css'
+
+const Page = () => {
+    return <h1>Page</h1>
+}
+const Header = () => {
+    return <h1>Header</h1>
+}
+const Footer = () => {
+    return <h1>Footer</h1>
+}
+const Layout = () => {
+    return <div>
+        <Header />
+        <Page />
+        <Footer />
+    </div>
+}
+
+const App = () => {
+    return <>
+        <Layout />
+    </>
+
+}
 
 
 
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+)
+
+Use case : with Props:
+......................
+
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './index.css'
+
+const Page = ({ children }) => {
+    return <>
+        {children}
+    </>
+}
+const Header = ({ title }) => {
+    return <h1>{title}</h1>
+}
+const Footer = () => {
+    return <h1>Footer</h1>
+}
+const Layout = (props) => {
+    return <div>
+        {props.children}
+    </div>
+}
+const User = (props) => {
+    console.log(props)
+    return <div>
+        <img src={props.imageSrc} alt='Your Image' />
+        <h1>{props.id}</h1>
+        <p>{props.userName}</p>
+        <p>{props.mail}</p>
+        <p>{props.status ? "Available" : "Not Available"}</p>
+    </div>
+}
+
+
+const App = () => {
+    const imageSrc = 'https://i.imgur.com/7vQD0fPs.jpg'
+
+    return <>
+        <Layout>
+            {/* Passing Header as prop */}
+            <Header title="User Information system">
+                 
+            </Header>
+            {/* Passing Page as prop */}
+            <Page>
+                <User userName={"Ram"} id={2} mail={"ram@gmail.com"} status={true} imageSrc={imageSrc} />
+            </Page>
+            {/* Passing Footer as prop */}
+            <Footer />
+        </Layout >
+    </>
+
+}
+
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+)
+......................................................................................
+...................................................................................
+...................................................................................
+			   State Pattern
+		       (Dynamic User Interface)
+			 (Event Handling)
+....................................................................................
+
+What is state?
+  State is another way of representing data in React.
+
+As of we have seen data is not changing or updating...
+
+How to introduce State?
+
+There are two ways
+
+1.class pattern 
+   It is legacy way of representing state and Managining state
+   It is not recommended..
+
+2.Function pattern
+    It is modern way of representing state
+    State is represented via "Hook".
+
+
+1.class pattern 
+
+Declare class:
+import React from 'react';
+import ReactDOM from 'react-dom';
+
+
+class Review extends React.Component {
+
+    render() {
+        return <div>
+            <h1>Review Component</h1>
+        </div>
+    }
+}
+
+
+const App = () => {
+    return <>
+        <Review></Review>
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+..................................................................................
+Declare data:
+
+React.Component is super class , which is having properites and methods
+
+Methods:
+
+1.lifecycle methods
+2.setState
+3.forceUpdate()
+
+Instance Properties
+
+1.state
+2.props
+
+state default value is null, that means we need to initalize state variable with data.
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+
+class Review extends React.Component {
+
+    render() {
+        console.log(this.state)
+        return <div>
+            <h1>Review Component</h1>
+        </div>
+    }
+}
+
+
+const App = () => {
+    return <>
+        <Review></Review>
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+
+here out put would be "null"
+
+...
+
+How to declare state?
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+
+class Review extends React.Component {
+
+    //state declaration
+    state = {
+        //application data/ui data
+        like: 0
+    }
+
+    render() {
+        console.log(this.state)
+        return <div>
+            <h1>Review Component</h1>
+        </div>
+    }
+}
+
+
+const App = () => {
+    return <>
+        <Review></Review>
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+..............
+How to bind state in UI, what is initial state.
+
+Initial state means, the state(data) is associated with UI during first rendering.
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+
+class Review extends React.Component {
+
+    //state declaration
+    state = {
+        //application data/ui data
+        like: 10
+    }
+
+    render() {
+        console.log(this.state)
+        return <div>
+            <h1>Review Component</h1>
+            <h5>Like {this.state.like}</h5>
+        </div>
+    }
+}
+
+
+const App = () => {
+    return <>
+        <Review></Review>
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+
+....................................................................................
+....................................................................................
+			  Event Handler
+....................................................................................
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+
+class Review extends React.Component {
+
+    //state declaration
+    state = {
+        //application data/ui data
+        like: 10
+    }
+    //listener: arrow function
+    onLike = () => {
+        console.log('like')
+    }
+    render() {
+        console.log(this.state)
+        return <div>
+            <h1>Review Component</h1>
+            <h5>Like {this.state.like}</h5>
+            <button onClick={this.onLike}>😁</button>
+        </div>
+    }
+}
+
+
+const App = () => {
+    return <>
+        <Review></Review>
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+.....................................................................................
+		    State Mutation -State update/change
+.....................................................................................
+...................................................................................
+			 State Mutation
+..................................................................................
+
+How Component can change the data?
+
+-Via State
+
+How state can be changed
+
+-Via Events
+
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+
+class Review extends React.Component {
+
+    //state declaration
+    state = {
+        //application data/ui data
+        like: 10
+    }
+    //listener: arrow function
+    onLike = () => {
+        this.state.like++
+        console.log('inside listener', this.state)
+    }
+    render() {
+        console.log('inside render', this.state)
+        return <div>
+            <h1>Review Component</h1>
+            <h5>Like {this.state.like}</h5>
+            <button onClick={this.onLike}>😁</button>
+        </div>
+    }
+}
+
+
+const App = () => {
+    return <>
+        <Review></Review>
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+
+In the above we have incremented, like inside listener, but no update in UI
+
+Why?
+  
+  UI logic is written inside render function,
+  When ever like is changed, we need to call render function, so that ui could be updated with new like data.
+
+How to call render?
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+
+class Review extends React.Component {
+
+    //state declaration
+    state = {
+        //application data/ui data
+        like: 10
+    }
+    //listener: arrow function
+    onLike = () => {
+        this.state.like++
+        console.log('inside listener', this.state)
+        //calling render
+        this.render()
+    }
+    render() {
+        console.log('inside render', this.state)
+        return <div>
+            <h1>Review Component</h1>
+            <h5>Like {this.state.like}</h5>
+            <button onClick={this.onLike}>😁</button>
+        </div>
+    }
+}
+
+
+const App = () => {
+    return <>
+        <Review></Review>
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+
+You can notice in the above, we have called render inside listener, render is called but no UI update.
+
+Why?
+
+Can we call render method directly inside event listener...
+Yes, but no impact on ui update...
+
+   onLike = () => {
+        this.state.like++
+        console.log(this.state.like)
+        this.render()
+        console.log('onLike is clicked')
+    }
+Note: render should be not called directly in order to update user interface..
+....................................................................................
+
+.................................................................................
+		Before writing code, we need to learn the concept
+....................................................................................
+			Functional Programming principles
+....................................................................................
+Programming paradigms:
+ any programming language is built on the top of programming paradigms
+ Collections of set of principles and concepts.
+
+Most popular programming paradigms.
+1.Object oriented
+   C++,java,C#......
+2.Procedural oriented
+   C
+3.Functional Programming 
+   LISP,Clojure,scheme,js
+
+Some languages follow multiple paradigms (hybrid) , some follow single paradigm (solo)
+
+javascript is object based, functional style programming language.
+java is object oriented,functional style programming...
+
+What is functional programming?
+
+  It is type of programming paradigm.
+
+functional programming is the first programming paradagim introduced in 1935, as part of Mathmetics called "Lambda Calculs".
+
+The first functional programming language called "LISP" was created in 1955.
+
+React uses fp principles:
+
+1.Pure functions
+2.Immuablity
+
+
+Pure Functions:
+
+Pure functions are defined by two rules..
+Rule A:
+  if function receives input, the function returns the input without any mutation...
+
+//fp principles : rule A:
+
+
+//is this function is pure or not : pure 
+function Hello(message) {
+    return message
+}
+console.log(Hello('hello'))
+
+//is this function is pure or not: impure function
+function doubleIt(value) {
+    return value * 2
+}
+console.log(doubleIt(20))
+
+Are we applying pure function rule a in React?
+
+
+Yes,With Respect to "props" every function is pure.
+
+//Pure function rule A in react.
+import ReactDOM from 'react-dom/client';
+
+//Every component is  based on pure function with respect to "props"
+const Welcome = props => {
+    //props.message = 'hai' // props are read only
+     return <div>
+        <h1>{props.message}</h1>
+    </div>
+}
+
+const App = () => {
+    return <>
+        <Welcome message="hello" />
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+.....................................................................................
+				Pure Function Rule B
+....................................................................................
+Rule B:
+.......
+ if function receives input, what if i want to change(mutate),We can apply rule b.
+ 
+if function receives input,and modify input , we should return new object every time, which is called immutablity. 
+Rule B:
+.......
+ if function receives input, what if i want to change(mutate),We can apply rule b.
+ 
+if function receives input,and modify input , we should return new object every time, which is called immutablity. 
+
+
+//pure function Rule B
+
+
+function updateProfile(city, profile) {
+    //update profile city 
+    profile.city = city
+ 
+    return profile
+}
+
+let profile = {
+    name: 'Subramanian',
+    city: 'Coimbatore'
+}
+
+console.log('before update', profile)
+const result = updateProfile('Chennai', profile)
+console.log(profile === result ? "Same Object" : "Different Object")
+console.log('after update', result)
+
+Result:
+before update {name: 'Subramanian', city: 'Coimbatore'}
+index.js:18 Same Object
+index.js:19 after update {name: 'Subramanian', city: 'Chennai'}
+
+The above code is pure or not?
+
+The above is not pure, it is impure.
+
+ "I need to mutate state(data), but at the same time, i need purity"
+			
+	                  Apply Immutablity Principle
+
+
+What is immutability?
+
+  When ever you update the data(object), you have to create new object every time.
+
+In order to write immutable code, js supports many patterns
+
+1. Plain js pattern.
+//pure function Rule B
+
+function updateProfile(city, profile) {
+    //return new object
+    return {
+        name: profile.name,
+        city: city
+    }
+}
+
+let profile = {
+    name: 'Subramanian',
+    city: 'Coimbatore'
+}
+
+console.log('before update', profile)
+const result = updateProfile('Chennai', profile)
+console.log(profile === result ? "Same Object" : "Different Object")
+console.log('after update', result)
+
+Plain js pattern has some drawback, we have to copy all the properties manually...
+
+2.Object.assign pattern
+//pure function Rule B
+
+function updateProfile(city, profile) {
+    //Object.assign 
+    return Object.assign({}, profile, { city: city })
+}
+
+let profile = {
+    name: 'Subramanian',
+    city: 'Coimbatore'
+}
+
+console.log('before update', profile)
+const result = updateProfile('Chennai', profile)
+console.log(profile === result ? "Same Object" : "Different Object")
+console.log('after update', result)
+
+3.ES 7 Spread operator 
+//pure function Rule B
+
+function updateProfile(city, profile) {
+      return { ...profile, city }
+}
+
+let profile = {
+    name: 'Subramanian',
+    city: 'Coimbatore'
+}
+
+console.log('before update', profile)
+const result = updateProfile('Chennai', profile)
+console.log(profile === result ? "Same Object" : "Different Object")
+console.log('after update', result)
+
+.....................................................................................
+.....................................................................................
+			Arrays -Pure functions (immutablity)
+.....................................................................................
+
+Array pure functions:
+
+1.map
+  map is pure function , which returns new array when you iterate.
+
+2.filter
+  filter is also function, which returns new array when you iterate.
+
+map:
+
+
+function transform(data) {
+
+    return data.map(item => item)
+}
+
+let list = ['subramanian', 'ram', 'murugan']
+
+const response = transform(list)
+
+console.log(list === response ? "Same" : "Different")
+
+filter:
+
+
+function filter(data) {
+
+    return data.filter(item => item.status === true)
+}
+
+let employees = [{
+    id: 1,
+    name: 'subramanian',
+    status: true
+},
+{
+    id: 2,
+    name: 'Ram',
+    status: false
+},
+{
+    id: 3,
+    name: 'Karthik',
+    status: true
+},
+{
+    id: 4,
+    name: 'Murugan',
+    status: false
+}
+
+]
+
+const response = filter(employees)
+
+console.log(employees === response ? "Same" : "Different")
+.....................................................................................
+
+Add Item:
+
+push
+
+
+//is it pure or not
+function add(todos, todo) {
+    return todos.push(todo)
+}
+let todos = [{
+    title: 'Learn react',
+    done: true
+}];
+
+//Testing 
+Object.freeze(todos)
+
+console.log(add(todos, { title: 'Learn Microservices', done: false }));
+
+
+Response:
+Uncaught TypeError: Cannot add property 1, object is not extensible
+
+You are trying to add  on exiting memory... which is not pure and immutable...
+
+so "array.push" is not pure function.
+
+How to add item into array with purity:
+
+Solution:
+
+1.concat
+   it is pure and immutable method..
+
+//is it pure or not
+function add(todos, todo) {
+   // return todos.push(todo)
+   return todos.concat(todo)
+}
+let todos = [{
+    title: 'Learn react',
+    done: true
+}];
+
+//Testing 
+Object.freeze(todos)
+
+console.log(add(todos, { title: 'Learn Microservices', done: false }));
+
+2.Using spread operator
+
+//is it pure or not
+function add(todos, todo) {
+    // return todos.push(todo)
+    //  return todos.concat(todo)
+    return [...todos, todo]
+}
+let todos = [{
+    title: 'Learn react',
+    done: true
+}];
+
+//Testing 
+Object.freeze(todos)
+
+console.log(add(todos, { title: 'Learn Microservices', done: false }));
+....................................................................................
+import React from 'react'
+import ReactDOM from 'react-dom/client'
+import './index.css'
+
+class Like extends React.Component {
+
+    state = {
+        value: 0
+    }
+    //Event Listener
+    onIncrement = () => {
+        //through pure function only we can mutate the state
+        //prevState is just variable holding "State Object"
+        this.setState((prevState) => {
+            //return immutable object
+            // return {
+            //     value: prevState.value+1
+            // }
+            // return Object.assign({}, prevState, { value: prevState.value + 1 })
+            return { ...prevState, value: prevState.value + 1 }
+        })
+    }
+
+    render() {
+        console.log(this.state)
+        const { value } = this.state
+        return <div>
+            {/* <h1>Like {this.state.value}</h1> */}
+            <h1>Like {value}</h1>
+            <button onClick={this.onIncrement}>Like</button>
+        </div>
+    }
+}
+
+
+
+const App = () => {
+    return <>
+        <Like />
+    </>
+
+}
+
+
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <React.StrictMode>
+        <App />
+    </React.StrictMode>,
+)
+.....................................................................................
+.....................................................................................
+			Multiple State and Inline Event Listener
+.....................................................................................
+
+Note :
+ if want to more state variables, that has to be enclosed within single object only
+
+ state = {
+  ....
+ }
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+class Review extends React.Component {
+
+    state = {
+        like: 10,
+        dislike: 10
+    }
+    onLike = () => {
+        this.setState(function (previousState) {
+            console.log('Previous State ', previousState)
+            return { ...previousState, like: previousState.like + 1 }
+        })
+    }
+    render() {
+        console.log('current state', this.state)
+        return <div>
+            <h1>Review Component</h1>
+            <h5>Like {this.state.like} Dislike {this.state.dislike}</h5>
+            <button onClick={this.onLike}>😁</button>
+            {/* Inline listener */}
+            <button onClick={() => {
+                this.setState(function (previousState) {
+                    console.log('Previous State ', previousState)
+                    return { ...previousState, dislike: previousState.dislike + 1 }
+                })
+            }}>😫</button>
+
+        </div>
+    }
+}
+
+
+const App = () => {
+    return <>
+        <Review></Review>
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+.....................................................................................
+.....................................................................................
+			Complex State :Nested State
+
+			   
+state= {
+   house:{
+     name:'RavenClaw',
+     points:10
+   }
+}
+
+I need to increase the points By two..
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css'
+
+class HouseRating extends React.Component {
+    state = {
+        house: {
+            name: 'RavenClaw',
+            points: 10
+        }
+    }
+    onIncreasePointsByTwo = () => {
+        this.setState((prveState)=>{
+            return {
+                ...prveState,  //level -0 copy
+                 house: {
+                    ...prveState.house, // level-1 copy : copy all properties within house 
+                    points: prveState.house.points+ 2
+                 }
+            }
+        })
+    }
+
+    render() {
+        return <div>
+            <h1>House Rating Component</h1>
+            <h3>House Name : {this.state.house.name}</h3>
+            <h3>Points : {this.state.house.points}</h3>
+            <button onClick={this.onIncreasePointsByTwo}>+</button>
+        </div>
+    }
+}
+
+const App = () => {
+    return <>
+        <HouseRating />
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+
+.....................................................................................
+				Deep Nesting
+.....................................................................................
+
+Assigment:
+state = {
+  customer: {
+    id:1,
+    name:'Subramanian'
+    contact: {
+	address: {
+	    city:'Chennai'
+	},
+	communcation:{ 
+           mobileNo:'9000000'
+	}
+    }
+  }
+
+}
+
+How to update mobileNo - 834343434
+.....................................................................................
+		      Complxity of Immutable Objects 
+				 and 
+			How to solve  them using 
+			     immer.js
+.....................................................................................
+What is immer?
+  immer is simple js lib, which helps to write complex immutable code in "mutable way" like regular javascript way.
+
+immutable syntax to update object property:
+
+    state = {
+        house: {
+            name: 'RavenClaw',
+            points: 10
+        }
+    }
+
+
+ 	return {
+                ...prevState, //level -0 copy
+                house: {
+                    ...prevState.house, // level-1 copy
+                    points: prevState.house.points + 2
+                }
+        }
+
+js syntax:
+
+    state = {
+        house: {
+            name: 'RavenClaw',
+            points: 10
+        }
+    }
+
+update state:
+
+state.house.points +=2
+
+immer is lib which takes care of writing mutable code on behalf of us, developer writes mutable code, immer converts into immutable code.
+
+Immer core concept:
+
+immer provides a function called "produce"
+
+produce(state,(draft)=>{
+  draft.house.points +=2
+})
+
+Getting started:
+
+steps:
+
+1.install immer lib
+
+npm i immer
+
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { produce } from 'immer';
+import './index.css'
+
+class HouseRating extends React.Component {
+
+    state = {
+        house: {
+            name: 'RavenClaw',
+            points: 10
+        }
+    }
+    onIncreasePointsByTwo = () => {
+        this.setState((prevState) => {
+            return produce(prevState, (draft) => {
+                draft.house.points += 2
+            })
+
+        })
+    }
+    render() {
+        return <div>
+            <h1>House Rating Component</h1>
+            <h3>House Name : {this.state.house.name}</h3>
+            <h3>Points : {this.state.house.points}</h3>
+            <button onClick={this.onIncreasePointsByTwo}>Rate</button>
+        </div>
+    }
+}
+
+
+const App = () => {
+    return <>
+        <HouseRating />
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { produce } from 'immer';
+import './index.css'
+
+class HouseRating extends React.Component {
+
+    state = {
+        house: {
+            name: 'RavenClaw',
+            points: 10
+        }
+    }
+    onIncreasePointsByTwo = () => {
+        this.setState((prevState) => {
+            return produce(prevState, (draft) => {
+                draft.house.points += 2
+            })
+
+        })
+    }
+    render() {
+        return <>
+            {/* here state as prop(dynamic prop) and function as prop */}
+            <HouseRatingDashBoard {...this.state} onIncrement={this.onIncreasePointsByTwo} />
+        </>
+    }
+}
+
+const HouseRatingDashBoard = props => {
+    console.log
+    return <div>
+        <h1>House Rating Component</h1>
+        <h3>House Name : {props.house.name}</h3>
+        <h3>Points : {props.house.points}</h3>
+        <button onClick={props.onIncrement}>Rate</button> 
+    </div>
+}
+
+
+const App = () => {
+    return <>
+        <HouseRating />
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+.....................................................................................
+			 Component Life cycles
+.....................................................................................
+
+React Component life cycle can be classified into three major phases
+
+1.Mount
+
+2.Update
+
+3.UnMount
+
+1.Mount :
+  Incase of class component
+
+ 1.constructor
+     Called only once in the component initalization
+     constructors are not used very much...
+ 2.render
+    Called for creating object tree-component tree-Virtual DOM
+
+ 3.componentDidMount
+    Called after render method, once the dom is ready- once ui is compltly loaded
+
+    This method is used heavily  used in react all versions.
+
+   It is used to inital data fetching from the apis
+   It is used to write any async task
+   It is used to write websocket connections
+
+
+2.Update
+    When user starts interacting
+   when state is mutated  -setState,forceUpdate
+   when new props are supplied -state as prop
+  
+   render
+      method is called after state mutation, in order to update ui with new state/
+   during render call,it creates vdom, apply an algorthim called "diff", to compute    old tree and new tree, update dom accordingly.
+  
+   componentDidUpdate
+     It is method which is called after render is completed in update cycle.
+    incase if you want fetch data from api after dom updates
+    incase if you want to any async tasks.
+    
+3.UnMount
+  When component is removed from memory
+ ComponentWillunMount
+   any resource clean up task...
+
+import { produce } from 'immer';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+
+class Counter extends React.Component {
+    state = {
+        value: 0
+    }
+    constructor() {
+        super()
+        console.log('constrcutor is called')
+    }
+    //render
+    render() {
+        console.log('render is called')
+        return <>
+            <h1>Counter {this.state.value} </h1>
+            <button onClick={() => {
+                this.setState(previousState => produce(previousState, (draft) => {
+                    draft.value += 1
+                }))
+            }}>+</button>
+        </>
+    }
+    componentDidMount() {
+        console.log('ComponentDidMount')
+    }
+    componentDidUpdate() {
+        console.log('ComponentDidUpdate')
+    }
+}
+
+
+
+const App = () => {
+    return <>
+        <Counter></Counter>
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />
+);
+.....................................................................................
+...................................................................................
+			Component Lifes and API Call
+...................................................................................
+
+In order to talk to REST API, react has no any opinion regarding which ajax libs should be used
+
+Popular ajax libs used inside react
+
+1.fetch
+2.axios
+import { produce } from 'immer';
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+
+
+class Posts extends React.Component {
+    state = {
+        posts: [], //data
+        error: null,
+        isLoading: false
+    }
+
+    //render
+    render() {
+        const { posts, error, isLoading } = this.state
+        if (error) {
+            return <div style={{ marginLeft: 50 }}>
+                <h1>Error : {error.message}</h1>
+            </div>
+        } else if (!isLoading) {
+            return <h1 style={{ textAlign: 'center' }}>🛴</h1>
+        } else {
+            return <div style={{ marginLeft: 50 }}>
+                <h1>Posts</h1>
+                <hr />
+                <ul>
+                    {posts.map(post => {
+                        return <li>{post.title}</li>
+                    })}
+                </ul>
+            </div>
+
+        }
+    }
+    async componentDidMount() {
+        const url = 'https://jsonplaceholder.typicode.com/posts'
+        try {
+            const response = await fetch(url)
+            const posts = await response.json()
+            console.log(posts)
+            this.setState(previousState => {
+                return produce(previousState, draft => {
+                    draft.posts = posts
+                    draft.isLoading = true
+                    draft.error = previousState.error
+                })
+            })
+        }
+        catch (err) {
+            this.setState(previousState => {
+                return produce(previousState, draft => {
+                    draft.error = err
+                })
+            })
+        }
+
+    }
+
+}
+
+
+
+const App = () => {
+    return <>
+        <Posts></Posts>
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
 
 
 

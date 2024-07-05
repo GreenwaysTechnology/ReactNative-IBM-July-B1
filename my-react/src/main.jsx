@@ -1,64 +1,71 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import { produce } from 'immer';
 import './index.css'
 
-const todoList = [{
-    id: 1,
-    name: 'learn react',
-    status: true
-},
-{
-    id: 2,
-    name: 'Learn next',
-    status: false
-},
-{
-    id: 3,
-    name: 'learn es',
-    status: true
-},
-{
-    id: 4,
-    name: 'learn Angular',
-    status: false
-},
-{
-    id: 5,
-    name: 'learn React Native',
-    status: false
-}
+class Posts extends React.Component {
 
-]
+    state = {
+        posts: [], //data
+        error: null,
+        isLoading: false
+    }
 
 
-// const Item = ({ todo: { name, status } }) => status ? <li>{name} ✔</li> : <li>{name} X </li>
+    render() {
+        const { posts, error, isLoading } = this.state
+        if (error) {
+            return <div style={{ marginLeft: 50 }}>
+                <h1>Error : {error.message}</h1>
+            </div>
+        } else if (!isLoading) {
+            return <h1 style={{ textAlign: 'center' }}>🛴</h1>
+        } else {
+            return <div style={{ marginLeft: 50 }}>
+                <h1>Posts</h1>
+                <hr />
+                <ul>
+                    {posts.map(post => {
+                        return <li>{post.title}</li>
+                    })}
+                </ul>
+            </div>
 
-const Item = ({ todo: { name, status } }) => <li> {name} {status && '✔'}</li>
-
-const TodoList = props => {
-    return <>
-        <ul>
-            {
-                props.todos.map(todo => {
-                    return <>
-                        <Item todo={todo} />
-                    </>
+        }
+    }
+    async componentDidMount() {
+        const url = 'https://jsonplaceholder.typicode.com/posts'
+        try {
+            const response = await fetch(url)
+            const posts = await response.json()
+            console.log(posts)
+            this.setState(previousState => {
+                return produce(previousState, draft => {
+                    draft.posts = posts
+                    draft.isLoading = true
+                    draft.error = previousState.error
                 })
-            }
-        </ul>
-    </>
+            })
+        }
+        catch (err) {
+            this.setState(previousState => {
+                return produce(previousState, draft => {
+                    draft.error = err
+                })
+            })
+        }
+    }
+
+
 }
+
+
 const App = () => {
     return <>
-        <TodoList todos={todoList} />
+        <Posts />
     </>
-
 }
 
 
-
-ReactDOM.createRoot(document.getElementById('root')).render(
-    <React.StrictMode>
-        <App />
-    </React.StrictMode>,
-)
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
