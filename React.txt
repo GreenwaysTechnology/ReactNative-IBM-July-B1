@@ -1685,8 +1685,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
         <App />
     </React.StrictMode>,
 )
-......................................................................................
-...................................................................................
+..................................................................................
 ...................................................................................
 			   State Pattern
 		       (Dynamic User Interface)
@@ -1858,7 +1857,6 @@ root.render(<App />
 );
 
 ....................................................................................
-....................................................................................
 			  Event Handler
 ....................................................................................
 import React from 'react';
@@ -1899,7 +1897,6 @@ root.render(<App />
 );
 .....................................................................................
 		    State Mutation -State update/change
-.....................................................................................
 ...................................................................................
 			 State Mutation
 ..................................................................................
@@ -2717,7 +2714,7 @@ React Component life cycle can be classified into three major phases
    componentDidUpdate
      It is method which is called after render is completed in update cycle.
     incase if you want fetch data from api after dom updates
-    incase if you want to any async tasks.
+    incase if you want to do any async tasks.
     
 3.UnMount
   When component is removed from memory
@@ -2780,6 +2777,7 @@ Popular ajax libs used inside react
 
 1.fetch
 2.axios
+
 import { produce } from 'immer';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
@@ -2814,6 +2812,8 @@ class Posts extends React.Component {
 
         }
     }
+
+  //https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API
     async componentDidMount() {
         const url = 'https://jsonplaceholder.typicode.com/posts'
         try {
@@ -2851,14 +2851,339 @@ const App = () => {
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(<App />);
+.....................................................................................
+			 Hooks
+.....................................................................................
+.....................................................................................
+				Hooks
+....................................................................................
+
+
+What is hook and why?
+Hooks are simple javascript function which holds Component's logic outside component.
+
+"Incase of class component , if you define a biz logic, the similar logic if you have in another component, we can't reuse."
+
+React 16 introduced a feature called hooks, by using hooks you can eleminate class components completly, by keeping functional components
+
+Hooks abstract complex  biz logic in reusable mannager.
+
+React provides lot of built in hooks to build app , as simple as possible , mean time you can create your own hooks (custom hooks).
 
 
 
+Hooks features:
+
+1.hook is simple js function
+2.hook can take input and also return values
+3.every hook function starts with "useHookName"
+
+
+Common Built in Hooks
+
+1.useState
+   To declare state and mutation inside functions
+2.useEffect
+   It represents "Life Methods" - compoentDidMount,componentDidUpdate
+3.useContext
+4.useRef
+5.useMemo
+6.useCallback
+etc......
+
+
+Thanks class components,goodbye to class components....
+
+State declaration,mutation:
+...........................
+
+useState:
+
+Syntax:
+
+const [state,setState]=useState(initalState)
+
+state is just variable it could be any thing
+setState -  pure function its name generally setVariableName
+
+const [counter,setCounter]=useState(initalState)
+
+initalState could be
+
+1.primitive values numbers,string,boolean
+2.objects
+3.arrays
+
+const [counter,setCounter]=useState(0)
+const [state,setState]=useState('hello')
+const [state,setState]=useState(false)
+const [state,setState]=useState(null)
+const [state,setState]=useState({count:0})
+const [state,setState]=useState([])
+
+import ReactDOM from 'react-dom/client';
+import './index.css'
+import { useState } from 'react';
+
+//hook based component
+
+const Counter = (props) => {
+
+    //state declaration.
+    const [counter, setCounter] = useState(0)
+
+    const onIncrement = () => {
+        //calling setCounter
+        // setCounter((prevState) => {
+        //     return prevState + 1
+        // })
+        setCounter(counter + 1)
+    }
+    return <div>
+        <h1>Counter {counter}</h1>
+        <button onClick={onIncrement}>+</button>
+        <button onClick={() => {
+            setCounter(counter - 1)
+        }}>-</button>
+
+    </div>
+}
 
 
 
+const App = () => {
+    return <>
+        <Counter />
+    </>
+}
 
 
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
 
 
+Multi state:
+import React, { useState } from 'react';
+import ReactDOM from 'react-dom/client';
 
+const Review = () => {
+    const [like, setLike] = useState(0)
+    const [dislike, setDislike] = useState(0)
+    return <div>
+        <h1>Review App</h1>
+        <h3>Like {like} DisLike {dislike}</h3>
+        <button onClick={() => setLike(like + 1)}>Like</button>
+        <button onClick={() => setDislike(like + 1)}>DisLike</button>
+    </div>
+}
+
+const App = () => {
+    return <>
+        <Review />
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+
+....................................................................................
+			  Objects and hooks using immer
+.....................................................................................
+import ReactDOM from 'react-dom/client'
+import './index.css'
+import { useState } from 'react'
+import { produce } from 'immer'
+
+
+const Review = () => {
+    //state declaration
+    const [review, setReview] = useState({ like: 0, dislike: 0 })
+    return <>
+        <h1>Review App</h1>
+        <h3>Like {review.like} Dislike {review.dislike}</h3>
+        <button onClick={() => {
+            setReview(prevState => {
+                return produce(prevState, (draft) => {
+                    draft.like += 1
+                })
+            })
+        }}>Like</button>
+        <button onClick={() => {
+            setReview(prevState => {
+                return produce(prevState, (draft) => {
+                    draft.dislike += 1
+                })
+            })
+        }}>Dislike</button>
+
+    </>
+
+}
+
+
+const App = () => {
+    return <>
+        <Review />
+    </>
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+    <App />
+)
+....................................................................................
+....................................................................................
+			 Life Cycle callbacks and hooks
+.....................................................................................
+
+comonentDidMount,componentDidupdate,componentWillUnMount
+    =>useEffect
+
+componentDidMount
+useEffect(()=>{},[])
+useEffect(()=>{})
+
+ComponentDidUpdate
+useEffect(()=>{},[state])
+ here if state is updated, then this hook will be called
+
+componentDidMount
+
+import { produce } from 'immer';
+import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom/client';
+
+const Review = () => {
+    const [like, setLike] = useState(0)
+
+    //Life cycle methods
+    useEffect(() => {
+        //you can write any async code 
+        setTimeout(() => {
+            setLike(like + 10)
+        }, 5000)
+    }, [])
+
+    return <div>
+        <h1>Like {like}</h1>
+        <button onClick={() => {
+            setLike(like + 1)
+        }}>+</button>
+    </div>
+}
+
+const App = () => {
+    return <>
+        <Review />
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+.....................................................................................
+import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom/client';
+import './index.css'
+
+const Review = () => {
+    const [like, setLike] = useState(0)
+    const [initialRender, setInitalRender] = useState(true);
+
+    //Life cycle methods :componentDidMount
+    useEffect(() => {
+        if (initialRender) {
+            setInitalRender(false)
+        } else {
+            console.log('update')
+        }
+    }, [like])
+
+    return <div>
+        <h1>Like {like}</h1>
+        <button onClick={() => {
+            setLike(like + 1)
+        }}>+</button>
+    </div>
+}
+
+const App = () => {
+    return <>
+        <Review />
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+.....................................................................................
+			....................................................................................
+			 API Calls in useEffect
+....................................................................................
+import { produce } from 'immer';
+import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom/client';
+
+const Posts = () => {
+    const [post, setPost] = useState({
+        posts: [], //data
+        error: null,
+        isLoading: false
+    })
+    async function fetchPosts() {
+        const url = 'https://jsonplaceholder.typicode.com/posts'
+        try {
+            const response = await fetch(url)
+            const posts = await response.json()
+            console.log(posts)
+            setPost(previousState => {
+                return produce(previousState, draft => {
+                    draft.posts = posts
+                    draft.isLoading = true
+                    draft.error = previousState.error
+                })
+            })
+        }
+        catch (err) {
+            setPost(previousState => {
+                return produce(previousState, draft => {
+                    draft.error = err
+                })
+            })
+        }
+    }
+
+    useEffect(() => {
+        fetchPosts()
+    }, [])
+
+    if (post.error) {
+        return <div style={{ marginLeft: 50 }}>
+            <h1>Error : {post.error.message}</h1>
+        </div>
+    } else if (!post.isLoading) {
+        return <h1 style={{ textAlign: 'center' }}>🛴</h1>
+    } else {
+        return <div style={{ marginLeft: 50 }}>
+            <h1>Posts</h1>
+            <hr />
+            <ul>
+                {post.posts.map(post => {
+                    return <li>{post.title}</li>
+                })}
+            </ul>
+        </div>
+
+    }
+}
+
+const App = () => {
+    return <>
+        <Posts />
+    </>
+}
+
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
+....................................................................................

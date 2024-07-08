@@ -1,54 +1,32 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
 import { produce } from 'immer';
+import React, { useEffect, useState } from 'react';
+import ReactDOM from 'react-dom/client';
 import './index.css'
 
-class Posts extends React.Component {
-
-    state = {
+const Posts = () => {
+    const [post, setPost] = useState({
         posts: [], //data
         error: null,
         isLoading: false
-    }
+    })
 
-
-    render() {
-        const { posts, error, isLoading } = this.state
-        if (error) {
-            return <div style={{ marginLeft: 50 }}>
-                <h1>Error : {error.message}</h1>
-            </div>
-        } else if (!isLoading) {
-            return <h1 style={{ textAlign: 'center' }}>🛴</h1>
-        } else {
-            return <div style={{ marginLeft: 50 }}>
-                <h1>Posts</h1>
-                <hr />
-                <ul>
-                    {posts.map(post => {
-                        return <li>{post.title}</li>
-                    })}
-                </ul>
-            </div>
-
-        }
-    }
-    async componentDidMount() {
+    async function fetchPosts() {
         const url = 'https://jsonplaceholder.typicode.com/posts'
         try {
             const response = await fetch(url)
             const posts = await response.json()
             console.log(posts)
-            this.setState(previousState => {
+            setPost(previousState => {
                 return produce(previousState, draft => {
                     draft.posts = posts
                     draft.isLoading = true
                     draft.error = previousState.error
                 })
             })
+
         }
         catch (err) {
-            this.setState(previousState => {
+            setPost(previousState => {
                 return produce(previousState, draft => {
                     draft.error = err
                 })
@@ -56,9 +34,32 @@ class Posts extends React.Component {
         }
     }
 
+    useEffect(() => {
+        //api call
+        fetchPosts()
+    }, [])
+
+    if (post.error) {
+        return <div style={{ marginLeft: 50 }}>
+            <h1>Error : {post.error.message}</h1>
+        </div>
+    } else if (!post.isLoading) {
+        return <h1 style={{ textAlign: 'center' }}>🛴</h1>
+    } else {
+        return <div style={{ marginLeft: 50 }}>
+            <h1>Posts</h1>
+            <hr />
+            <ul>
+                {post.posts.map(post => {
+                    return <li>{post.title}</li>
+                })}
+            </ul>
+        </div>
+
+    }
+
 
 }
-
 
 const App = () => {
     return <>
