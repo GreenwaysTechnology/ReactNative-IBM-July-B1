@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList, ActivityIndicator, Alert, TouchableHighlight } from "react-native";
+import { StyleSheet, View, Text, FlatList } from "react-native";
 import { produce } from 'immer'
 
 const Posts = props => {
@@ -34,27 +34,32 @@ const Posts = props => {
         fetchPosts()
     }, [])
 
-    const onSelect = item => {
-        Alert.alert(JSON.stringify(item))
-    }
-
     if (post.error) {
         return <View>
             <Text>Error: {post.error.message}</Text>
         </View>
     } else if (!post.isLoading) {
-        return <ActivityIndicator size="large" color="#00ff00" />
+        return <Text style={{ textAlign: 'center',fontSize:40 }}>
+            Loading...
+        </Text>
     } else {
         return <View style={{ marginLeft: 50 }}>
             <Text style={{ textAlign: 'center', color: 'red', fontSize: 30 }}>Posts</Text>
+            {/* <FlatList data={post.posts} renderItem={(obj) => {
+                return <Text style={styles.lable}>
+                    {obj.item.title}
+                </Text>
+            }} /> */}
+            {/* <FlatList data={post.posts} renderItem={({ item }) => {
+                return <Text style={styles.lable}>
+                    {item.title}
+                </Text>
+            }} /> */}
             <FlatList data={post.posts} keyExtractor={item => item.id}
-                renderItem={({ item }) => {
-                    return <TouchableHighlight activeOpacity={0.4}
-                        underlayColor={'yellow'} onPress={() => {
-                            onSelect(item)
-                        }}>
-                        <Text style={styles.lable}>{item.title}</Text>
-                    </TouchableHighlight>
+                renderItem={({ item: { title } }) => {
+                    return <Text style={styles.lable}>
+                        {title}
+                    </Text>
                 }} />
         </View>
     }

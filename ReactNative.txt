@@ -463,4 +463,685 @@ const styles = StyleSheet.create({
 Task:
  Create Component which displays user information
 .....................................................................................
+			State and React Native
+.....................................................................................
 
+import { useState } from "react";
+import { StyleSheet, View, Text, Button } from "react-native";
+
+const Review = props => {
+    const [like, setLike] = useState(0)
+    const onLike = () => {
+        setLike(like + 1)
+    }
+    return <>
+        <Text style={styles.lable}>Like {like}</Text>
+        <Button title="Like" onPress={onLike} />
+    </>
+}
+
+function App() {
+    return <View style={styles.container}>
+        <Review />
+    </View>
+}
+
+export default App;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'pink',
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    lable: {
+        marginLeft: 10,
+        fontFamily: "Arial, Helvetica, sans-serif",
+        fontWeight: 'bold',
+        fontSize: 40
+    }
+})
+
+Note: you can install immer js and you can use immer as well
+....................................................................................
+			API Calls, use Effect,Immer js
+.....................................................................................
+import { useEffect, useState } from "react";
+import { StyleSheet, View, Text, Button } from "react-native";
+import { produce } from 'immer'
+
+const Posts = props => {
+    const [post, setPost] = useState({
+        posts: [],
+        error: null,
+        isLoading: false
+    })
+
+    async function fetchPosts() {
+        const url = 'https://jsonplaceholder.typicode.com/posts'
+        try {
+            const response = await fetch(url)
+            const posts = await response.json()
+            setPost(prevState => {
+                return produce(prevState, draft => {
+                    draft.posts = posts
+                    draft.isLoading = true
+                    draft.error = prevState.error
+                })
+            })
+        }
+        catch (err) {
+            setPost(prevState => {
+                return produce(prevState, draft => {
+                    draft.error = err
+                })
+            })
+        }
+    }
+    useEffect(() => {
+        fetchPosts()
+    }, [])
+
+    if (post.error) {
+        return <View>
+            <Text>Error: {post.error.message}</Text>
+        </View>
+    } else if (!post.isLoading) {
+        return <Text style={{ textAlign: 'center' }}>
+            Loading...
+        </Text>
+    } else {
+        return <View style={{ marginLeft: 50 }}>
+            <Text>Posts</Text>
+            {/* iterate */}
+            <View>
+                {post.posts.map(post => {
+                    return <Text style={styles.lable} key={post.id}>{post.title}</Text>
+                })}
+            </View>
+        </View>
+    }
+}
+
+function App() {
+    return <View style={styles.container}>
+        <Posts/>
+    </View>
+}
+
+export default App;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'pink',
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    lable: {
+        marginLeft: 10,
+        fontFamily: "Arial, Helvetica, sans-serif",
+        fontWeight: 'bold',
+        fontSize: 40
+    }
+})
+
+In the above code, the scroll bar is not enabled,we need to enable them.
+...................................................................................
+			 Container Components
+...................................................................................
+
+Container components are components which contains other components which is called "View" in React Native.
+
+Types of Views:
+
+1.View
+2.ScrollView
+3.ListView
+4.SectionList
+
+View with Multiple Content
+View:
+import { StyleSheet, View, Text } from "react-native";
+
+const App = () => {
+    return <View style={page.container}>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+        <Text style={page.text}>Hello</Text>
+
+    </View>
+}
+export default App;
+
+//Common style
+const page = StyleSheet.create({
+    container: {
+        flex: 1,
+        padding: 24,
+        backgroundColor: 'pink'
+    },
+    text: {
+        fontSize: 30,
+        color: '#000'
+    }
+
+})
+})
+
+View container cant be used for multiple items to be displayed in a single page.
+.................................................................................
+			Scroll Behaviour
+.................................................................................
+
+View is going to hold child elements, act as container
+ScrollView is going hold child elements , act as container with scrollbar.
+import { useEffect, useState } from "react";
+import { StyleSheet, View, Text,  ScrollView } from "react-native";
+import { produce } from 'immer'
+
+const Posts = props => {
+    const [post, setPost] = useState({
+        posts: [],
+        error: null,
+        isLoading: false
+    })
+
+    async function fetchPosts() {
+        const url = 'https://jsonplaceholder.typicode.com/posts'
+        try {
+            const response = await fetch(url)
+            const posts = await response.json()
+            setPost(prevState => {
+                return produce(prevState, draft => {
+                    draft.posts = posts
+                    draft.isLoading = true
+                    draft.error = prevState.error
+                })
+            })
+        }
+        catch (err) {
+            setPost(prevState => {
+                return produce(prevState, draft => {
+                    draft.error = err
+                })
+            })
+        }
+    }
+    useEffect(() => {
+        fetchPosts()
+    }, [])
+
+    if (post.error) {
+        return <View>
+            <Text>Error: {post.error.message}</Text>
+        </View>
+    } else if (!post.isLoading) {
+        return <Text style={{ textAlign: 'center' }}>
+            Loading...
+        </Text>
+    } else {
+        return <View style={{ marginLeft: 50 }}>
+            <Text>Posts</Text>
+            {/* iterate */}
+            <ScrollView>
+                {post.posts.map(post => {
+                    return <Text style={styles.lable} key={post.id}>{post.title}</Text>
+                })}
+            </ScrollView>
+        </View>
+    }
+}
+
+function App() {
+    return <View style={styles.container}>
+        <Posts/>
+    </View>
+}
+
+export default App;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'pink',
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    lable: {
+        marginLeft: 5,
+        color:'blue',
+        fontFamily: "Arial, Helvetica, sans-serif",
+        fontWeight: 'bold',
+        fontSize: 20
+    }
+})
+...................................................................................
+				List Views
+...................................................................................
+
+React Native provides a suit of components for presenting lists of data, Generally, You will want to use "FlatList or Section List"
+
+
+FlatList:
+ It displays a scrolling list of changining, but similary structured data.
+ FlatList works well for long list of data , where number of items change over time.
+ 
+When compare to ScrollView,The FlatList only renders elements that are currently s howing on the screen, not all the elements at onces.
+
+
+
+FlatList is similar to array.map in react.
+
+FlatList requires two properties:
+
+1.data
+  data Source
+2.renderItem
+  takes one item from the source and returns a formtted component to render.
+
+FlatList with HardCoded data.
+.............................
+<FlatList data={dataSource} renderItem={(obj)=>{
+  return<Text>{obj.item.dataSource.property}</Text>
+}}
+
+data->Data Prop is called datasource which is plain array
+renderItem -
+  Takes an item from data prop and renders it into list
+
+renderItem({
+ item:ItemObject(todo,contact),
+ index:number,
+ separators:{
+
+ }
+})
+
+...
+import { useEffect, useState } from "react";
+import { StyleSheet, View, Text, FlatList } from "react-native";
+import { produce } from 'immer'
+
+const Posts = props => {
+    const [post, setPost] = useState({
+        posts: [],
+        error: null,
+        isLoading: false
+    })
+
+    async function fetchPosts() {
+        const url = 'https://jsonplaceholder.typicode.com/posts'
+        try {
+            const response = await fetch(url)
+            const posts = await response.json()
+            setPost(prevState => {
+                return produce(prevState, draft => {
+                    draft.posts = posts
+                    draft.isLoading = true
+                    draft.error = prevState.error
+                })
+            })
+        }
+        catch (err) {
+            setPost(prevState => {
+                return produce(prevState, draft => {
+                    draft.error = err
+                })
+            })
+        }
+    }
+    useEffect(() => {
+        fetchPosts()
+    }, [])
+
+    if (post.error) {
+        return <View>
+            <Text>Error: {post.error.message}</Text>
+        </View>
+    } else if (!post.isLoading) {
+        return <Text style={{ textAlign: 'center' }}>
+            Loading...
+        </Text>
+    } else {
+        return <View style={{ marginLeft: 50 }}>
+            <Text style={{ textAlign: 'center', color: 'red', fontSize: 30 }}>Posts</Text>
+            {/* <FlatList data={post.posts} renderItem={(obj) => {
+                return <Text style={styles.lable}>
+                    {obj.item.title}
+                </Text>
+            }} /> */}
+            {/* <FlatList data={post.posts} renderItem={({ item }) => {
+                return <Text style={styles.lable}>
+                    {item.title}
+                </Text>
+            }} /> */}
+            <FlatList data={post.posts} keyExtractor={item => item.id}
+                renderItem={({ item: { title } }) => {
+                    return <Text style={styles.lable}>
+                        {title}
+                    </Text>
+                }} />
+        </View>
+    }
+}
+
+function App() {
+    return <View style={styles.container}>
+        <Posts />
+    </View>
+}
+
+export default App;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'pink',
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    lable: {
+        marginLeft: 5,
+        color: 'blue',
+        fontFamily: "Arial, Helvetica, sans-serif",
+        fontWeight: 'bold',
+        fontSize: 20
+    }
+})
+...................................................................................
+			 Spinner - ActivityIndicator
+...................................................................................
+Displays a circular loading indicator.
+import { useEffect, useState } from "react";
+import { StyleSheet, View, Text, FlatList, ActivityIndicator } from "react-native";
+import { produce } from 'immer'
+
+const Posts = props => {
+    const [post, setPost] = useState({
+        posts: [],
+        error: null,
+        isLoading: false
+    })
+
+    async function fetchPosts() {
+        const url = 'https://jsonplaceholder.typicode.com/posts'
+        try {
+            const response = await fetch(url)
+            const posts = await response.json()
+            setPost(prevState => {
+                return produce(prevState, draft => {
+                    draft.posts = posts
+                    draft.isLoading = true
+                    draft.error = prevState.error
+                })
+            })
+        }
+        catch (err) {
+            setPost(prevState => {
+                return produce(prevState, draft => {
+                    draft.error = err
+                })
+            })
+        }
+    }
+    useEffect(() => {
+        fetchPosts()
+    }, [])
+
+    if (post.error) {
+        return <View>
+            <Text>Error: {post.error.message}</Text>
+        </View>
+    } else if (!post.isLoading) {
+        return <ActivityIndicator size="large" color="#00ff00" />
+    } else {
+        return <View style={{ marginLeft: 50 }}>
+            <Text style={{ textAlign: 'center', color: 'red', fontSize: 30 }}>Posts</Text>
+            <FlatList data={post.posts} keyExtractor={item => item.id}
+                renderItem={({ item: { title } }) => {
+                    return <Text style={styles.lable}>
+                        {title}
+                    </Text>
+                }} />
+        </View>
+    }
+}
+
+function App() {
+    return <View style={styles.container}>
+        <Posts />
+    </View>
+}
+
+export default App;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'pink',
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    lable: {
+        marginLeft: 5,
+        color: 'blue',
+        fontFamily: "Arial, Helvetica, sans-serif",
+        fontWeight: 'bold',
+        fontSize: 20
+    }
+})
+....................................................................................
+			How to select item from List
+
+How to show them in Alert?
+
+React Native offers api called alert.
+
+import { useEffect, useState } from "react";
+import { StyleSheet, View, Text, FlatList, ActivityIndicator, Alert } from "react-native";
+import { produce } from 'immer'
+
+const Posts = props => {
+    const [post, setPost] = useState({
+        posts: [],
+        error: null,
+        isLoading: false
+    })
+
+    async function fetchPosts() {
+        const url = 'https://jsonplaceholder.typicode.com/posts'
+        try {
+            const response = await fetch(url)
+            const posts = await response.json()
+            setPost(prevState => {
+                return produce(prevState, draft => {
+                    draft.posts = posts
+                    draft.isLoading = true
+                    draft.error = prevState.error
+                })
+            })
+        }
+        catch (err) {
+            setPost(prevState => {
+                return produce(prevState, draft => {
+                    draft.error = err
+                })
+            })
+        }
+    }
+    useEffect(() => {
+        fetchPosts()
+    }, [])
+
+    const onSelect = item => {
+        Alert.alert(JSON.stringify(item))
+    }
+
+    if (post.error) {
+        return <View>
+            <Text>Error: {post.error.message}</Text>
+        </View>
+    } else if (!post.isLoading) {
+        return <ActivityIndicator size="large" color="#00ff00" />
+    } else {
+        return <View style={{ marginLeft: 50 }}>
+            <Text style={{ textAlign: 'center', color: 'red', fontSize: 30 }}>Posts</Text>
+            <FlatList data={post.posts} keyExtractor={item => item.id}
+                renderItem={({ item }) => {
+                    return <Text onPress={() => {
+                        onSelect(item)
+                    }} style={styles.lable}>
+                        {item.title}
+                    </Text>
+                }} />
+        </View>
+    }
+}
+
+function App() {
+    return <View style={styles.container}>
+        <Posts />
+    </View>
+}
+
+export default App;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'pink',
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    lable: {
+        marginLeft: 5,
+        color: 'blue',
+        fontFamily: "Arial, Helvetica, sans-serif",
+        fontWeight: 'bold',
+        fontSize: 20
+    }
+})
+
+....................................................................................
+			 Select Item with Touchable Features
+.....................................................................................
+
+In order to add touchable features , react native offers many components
+
+1.TouchableHighlight
+2.TouchableOpacity
+3.TouchableWithoutFeedBack
+import { useEffect, useState } from "react";
+import { StyleSheet, View, Text, FlatList, ActivityIndicator, Alert, TouchableHighlight } from "react-native";
+import { produce } from 'immer'
+
+const Posts = props => {
+    const [post, setPost] = useState({
+        posts: [],
+        error: null,
+        isLoading: false
+    })
+
+    async function fetchPosts() {
+        const url = 'https://jsonplaceholder.typicode.com/posts'
+        try {
+            const response = await fetch(url)
+            const posts = await response.json()
+            setPost(prevState => {
+                return produce(prevState, draft => {
+                    draft.posts = posts
+                    draft.isLoading = true
+                    draft.error = prevState.error
+                })
+            })
+        }
+        catch (err) {
+            setPost(prevState => {
+                return produce(prevState, draft => {
+                    draft.error = err
+                })
+            })
+        }
+    }
+    useEffect(() => {
+        fetchPosts()
+    }, [])
+
+    const onSelect = item => {
+        Alert.alert(JSON.stringify(item))
+    }
+
+    if (post.error) {
+        return <View>
+            <Text>Error: {post.error.message}</Text>
+        </View>
+    } else if (!post.isLoading) {
+        return <ActivityIndicator size="large" color="#00ff00" />
+    } else {
+        return <View style={{ marginLeft: 50 }}>
+            <Text style={{ textAlign: 'center', color: 'red', fontSize: 30 }}>Posts</Text>
+            <FlatList data={post.posts} keyExtractor={item => item.id}
+                renderItem={({ item }) => {
+                    return <TouchableHighlight activeOpacity={0.4}
+                        underlayColor={'yellow'} onPress={() => {
+                            onSelect(item)
+                        }}>
+                        <Text style={styles.lable}>{item.title}</Text>
+                    </TouchableHighlight>
+                }} />
+        </View>
+    }
+}
+
+function App() {
+    return <View style={styles.container}>
+        <Posts />
+    </View>
+}
+
+export default App;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'pink',
+        padding: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    lable: {
+        marginLeft: 5,
+        color: 'blue',
+        fontFamily: "Arial, Helvetica, sans-serif",
+        fontWeight: 'bold',
+        fontSize: 20
+    }
+})

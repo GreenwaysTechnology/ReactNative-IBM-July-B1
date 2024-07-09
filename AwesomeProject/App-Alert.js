@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList, ActivityIndicator, Alert, TouchableHighlight } from "react-native";
+import { StyleSheet, View, Text, FlatList, ActivityIndicator, Alert } from "react-native";
 import { produce } from 'immer'
 
 const Posts = props => {
@@ -49,12 +49,11 @@ const Posts = props => {
             <Text style={{ textAlign: 'center', color: 'red', fontSize: 30 }}>Posts</Text>
             <FlatList data={post.posts} keyExtractor={item => item.id}
                 renderItem={({ item }) => {
-                    return <TouchableHighlight activeOpacity={0.4}
-                        underlayColor={'yellow'} onPress={() => {
-                            onSelect(item)
-                        }}>
-                        <Text style={styles.lable}>{item.title}</Text>
-                    </TouchableHighlight>
+                    return <Text onPress={() => {
+                        onSelect(item)
+                    }} style={styles.lable}>
+                        {item.title}
+                    </Text>
                 }} />
         </View>
     }

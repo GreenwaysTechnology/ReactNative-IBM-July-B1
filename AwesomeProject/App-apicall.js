@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList, ActivityIndicator, Alert, TouchableHighlight } from "react-native";
+import { StyleSheet, View, Text, Button } from "react-native";
 import { produce } from 'immer'
 
 const Posts = props => {
@@ -34,35 +34,30 @@ const Posts = props => {
         fetchPosts()
     }, [])
 
-    const onSelect = item => {
-        Alert.alert(JSON.stringify(item))
-    }
-
     if (post.error) {
         return <View>
             <Text>Error: {post.error.message}</Text>
         </View>
     } else if (!post.isLoading) {
-        return <ActivityIndicator size="large" color="#00ff00" />
+        return <Text style={{ textAlign: 'center' }}>
+            Loading...
+        </Text>
     } else {
         return <View style={{ marginLeft: 50 }}>
-            <Text style={{ textAlign: 'center', color: 'red', fontSize: 30 }}>Posts</Text>
-            <FlatList data={post.posts} keyExtractor={item => item.id}
-                renderItem={({ item }) => {
-                    return <TouchableHighlight activeOpacity={0.4}
-                        underlayColor={'yellow'} onPress={() => {
-                            onSelect(item)
-                        }}>
-                        <Text style={styles.lable}>{item.title}</Text>
-                    </TouchableHighlight>
-                }} />
+            <Text>Posts</Text>
+            {/* iterate */}
+            <View>
+                {post.posts.map(post => {
+                    return <Text style={styles.lable} key={post.id}>{post.title}</Text>
+                })}
+            </View>
         </View>
     }
 }
 
 function App() {
     return <View style={styles.container}>
-        <Posts />
+        <Posts/>
     </View>
 }
 
@@ -77,10 +72,9 @@ const styles = StyleSheet.create({
         justifyContent: 'center'
     },
     lable: {
-        marginLeft: 5,
-        color: 'blue',
+        marginLeft: 10,
         fontFamily: "Arial, Helvetica, sans-serif",
         fontWeight: 'bold',
-        fontSize: 20
+        fontSize: 40
     }
 })
