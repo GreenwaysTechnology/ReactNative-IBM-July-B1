@@ -178,3 +178,289 @@ https://reactnative.dev/docs/environment-setup?guide=native&os=windows&platform=
 npx react-native doctor
 
 
+Compiler Configuration:
+
+React Native uses different compilers
+
+1.babel
+  convert jsx code into java script
+
+2.Metro Bundler -https://facebook.github.io/metro/
+
+  Convert React native code into Platform specific code..
+
+
+Entry file:
+
+index.js
+
+import {AppRegistry} from 'react-native';
+import App from './App';
+import {name as appName} from './app.json';
+
+AppRegistry.registerComponent(appName, () => App);
+		|
+               Mounting root Component
+
+Root Component is always App Component.
+
+React Native Application Architecture:
+......................................
+
+React Native apps are collection of components(From react native core,third party components,expo components).
+
+
+React Native App= {Components + React Core Features + React Native Router}
+
+Core Components:
+
+1.View
+2.Text
+3.Image
+4.TextInput
+5.ScrollView
+6.StyleSheet
+
+User Interface:
+1.Button
+2.Switch
+
+List Views:
+1.FlatList
+2.SectionList
+
+Others:
+
+1.Alert
+2.ActivityIndicator
+3.Modal
+4.StatusBar
+5.Animated
+etc...
+
+
+View and Text:
+.............
+
+View 
+
+ 	The most fundamental component for building a UI, View is a container that supports layout with flexbox, style, some touch handling, and accessibility controls. 
+View maps directly to the native view equivalent on whatever platform React Native is running on, whether that is a UIView, <div>, android.view, etc.
+
+Text 
+   A React component for displaying text.
+
+Text supports nesting, styling, and touch handling.
+
+import { Text, View } from "react-native";
+
+function App() {
+
+    return <View>
+        <Text>Hello</Text>
+    </View>
+}
+
+export default App;
+
+
+Pointers:
+
+1.Every react native app  entry is App.js only
+2.App component must be exported using "export default only"
+..................................................................................
+			 Styling
+..................................................................................
+Styles:
+.......
+
+In react Styles are added through css, react native does not support css because no html is used.
+
+React Native does not allow css directly, but supports indirectly via javascript..
+
+CSS can applied to web in two ways
+
+1.via CSS language
+
+body {
+
+}
+#container { 
+
+}
+
+<div class="container"></div>
+
+2.via javascript 
+  Dynamic css.
+
+CSS added to element dynamically after page has been rendered.
+
+JS provides an api to add css dynamically.
+
+anyElement.style=stylevalue
+
+eg:
+document.getElementById("myDiv").style.border = "thick solid #0000FF";
+
+https://www.w3schools.com/jsref/dom_obj_style.asp
+
+React native supports css via coding...
+
+...................................................................................
+			StyleSheet - Component
+..................................................................................
+
+A StyleSheet is an abstraction similar to CSS StyleSheets
+
+How to declare style?
+
+StyleSheet object has method called "create" method
+
+StyleSheet.create({
+ styleProperty: propvalue,
+ stylePropery:{
+    styleProp:propValue
+ }
+});
+
+StyleSheet must follow css javascript property rules..
+
+import { StyleSheet, Text, View } from "react-native";
+
+function App() {
+
+    return <View style={styles.container}>
+        <Text style={styles.lable}>Hello</Text>
+        <Text style={{ color: 'blue', fontSize: 30, fontStyle: 'italic' }}>Welcome To React Native</Text>
+    </View>
+}
+
+export default App;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'pink',
+        padding:10
+    },
+    lable: {
+        marginLeft:10,
+        fontFamily: "Arial, Helvetica, sans-serif",
+        fontWeight: 'bold',
+        fontSize: 40
+    }
+})
+....................................................................................
+			 Compoents and React Native
+....................................................................................
+
+Components follows React core principles 
+
+1.composition
+2.props
+3.state
+
+How to Pass props?
+import { StyleSheet, View, Text } from "react-native";
+
+// const Greeter = props => <>
+//     <Text style={styles.lable}>{props.message}
+//     </Text>
+// </>
+
+const Greeter = ({ message = "Greet" }) => <>
+    <Text style={styles.lable}>{message}
+    </Text>
+</>
+//
+// Greeter.defaultProps = {
+//     message: 'Greet'
+// }
+
+function App() {
+
+    return <View style={styles.container}>
+        <Greeter message="Hello" />
+        <Greeter message="Hai" />
+        <Greeter message="Welcome" />
+        <Greeter />
+
+
+    </View>
+}
+
+export default App;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'pink',
+        padding: 10
+    },
+    lable: {
+        marginLeft: 10,
+        fontFamily: "Arial, Helvetica, sans-serif",
+        fontWeight: 'bold',
+        fontSize: 40
+    }
+})
+
+Modularation:
+
+React native project does not have any folder structure by default, if you want you can create folders.
+
+src/domainModals
+
+src/components/Greeter.jsx
+
+import { StyleSheet, Text } from "react-native";
+
+export const Greeter = ({ message = "Greet" }) => <>
+    <Text style={styles.lable}>{message}
+    </Text>
+</>
+
+const styles = StyleSheet.create({
+    lable: {
+        marginLeft: 10,
+        fontFamily: "Arial, Helvetica, sans-serif",
+        fontWeight: 'bold',
+        fontSize: 40
+    }
+})
+
+App.js
+import { StyleSheet, View, Text } from "react-native";
+import { Greeter } from "./src/components/Greeter";
+
+function App() {
+
+    return <View style={styles.container}>
+        <Greeter message="Hello" />
+        <Greeter message="Hai" />
+        <Greeter message="Welcome" />
+        <Greeter />
+    </View>
+}
+
+export default App;
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: 'pink',
+        padding: 10
+    },
+    lable: {
+        marginLeft: 10,
+        fontFamily: "Arial, Helvetica, sans-serif",
+        fontWeight: 'bold',
+        fontSize: 40
+    }
+})
+
+Task:
+ Create Component which displays user information
+.....................................................................................
+
