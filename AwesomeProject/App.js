@@ -1,86 +1,41 @@
-import { useEffect, useState } from "react";
-import { StyleSheet, View, Text, FlatList, ActivityIndicator, Alert, TouchableHighlight } from "react-native";
-import { produce } from 'immer'
+import React, { useState } from 'react';
+import { StyleSheet, Text, View, TextInput, Button, Alert } from 'react-native';
 
-const Posts = props => {
-    const [post, setPost] = useState({
-        posts: [],
-        error: null,
-        isLoading: false
-    })
+const TextInputComponent = () => {
+    const [text, onChangeText] = useState('Welcome')
+    const [number, onChangeNumber] = useState(0)
 
-    async function fetchPosts() {
-        const url = 'https://jsonplaceholder.typicode.com/posts'
-        try {
-            const response = await fetch(url)
-            const posts = await response.json()
-            setPost(prevState => {
-                return produce(prevState, draft => {
-                    draft.posts = posts
-                    draft.isLoading = true
-                    draft.error = prevState.error
-                })
-            })
-        }
-        catch (err) {
-            setPost(prevState => {
-                return produce(prevState, draft => {
-                    draft.error = err
-                })
-            })
-        }
-    }
-    useEffect(() => {
-        fetchPosts()
-    }, [])
-
-    const onSelect = item => {
-        Alert.alert(JSON.stringify(item))
-    }
-
-    if (post.error) {
-        return <View>
-            <Text>Error: {post.error.message}</Text>
-        </View>
-    } else if (!post.isLoading) {
-        return <ActivityIndicator size="large" color="#00ff00" />
-    } else {
-        return <View style={{ marginLeft: 50 }}>
-            <Text style={{ textAlign: 'center', color: 'red', fontSize: 30 }}>Posts</Text>
-            <FlatList data={post.posts} keyExtractor={item => item.id}
-                renderItem={({ item }) => {
-                    return <TouchableHighlight activeOpacity={0.4}
-                        underlayColor={'yellow'} onPress={() => {
-                            onSelect(item)
-                        }}>
-                        <Text style={styles.lable}>{item.title}</Text>
-                    </TouchableHighlight>
-                }} />
-        </View>
-    }
-}
-
-function App() {
-    return <View style={styles.container}>
-        <Posts />
+    return <View>
+        <TextInput style={styles.input} value={text} onChangeText={onChangeText} />
+        <Button title='Show Text' onPress={() => {
+            Alert.alert(text)
+        }} />
+        <TextInput keyboardType="numeric" style={styles.input} value={number} onChangeText={onChangeNumber} />
+        <Button title='Show Number' onPress={() => {
+            let a = 100
+            let result = a * parseInt(number)
+            Alert.alert(result.toString())
+        }} />
     </View>
 }
 
-export default App;
+const App = () => (
+    <View style={styles.container}>
+        <TextInputComponent />
+    </View>
+);
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: 'pink',
-        padding: 10,
-        alignItems: 'center',
-        justifyContent: 'center'
+        backgroundColor: 'pink'
     },
-    lable: {
-        marginLeft: 5,
-        color: 'blue',
-        fontFamily: "Arial, Helvetica, sans-serif",
-        fontWeight: 'bold',
-        fontSize: 20
+    input: {
+        height: 40,
+        margin: 12,
+        borderWidth: 1,
+        padding: 10
     }
-})
+});
+
+export default App;
