@@ -1,61 +1,37 @@
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View, Text, StyleSheet, Button } from 'react-native';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+//Should always be top 
+import 'react-native-gesture-handler';
 
-//create tab:
-const Tab = createBottomTabNavigator();
-const Stack = createNativeStackNavigator();
+import {View} from "react-native"
+import { NavigationContainer } from "@react-navigation/native";
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { Text } from 'react-native-paper';
 
-const Messages = props => {
-    const { navigation } = props;
-    return <View style={styles.container}>
-        <Text>Messages Screen</Text>
-        <Button title="go to Settions" onPress={() => {
-            navigation.navigate('Settings')
-        }} />
+const Drawer = createDrawerNavigator();
+
+const Feed = () => {
+    return <View style={{ flex: 1 }}>
+        <Text>Feed </Text>
     </View>
 }
 
-const Feed = props => {
-    return <View style={styles.container}>
-        <Text>Feed Screen</Text>
+const Article = () => {
+    return <View style={{ flex: 1 }}>
+        <Text>Article </Text>
     </View>
 }
-const Settings = props => {
-    return <View style={styles.container}>
-        <Text>Settings Screen</Text>
-    </View>
+function MyDrawer() {
+    return (
+        <Drawer.Navigator>
+            <Drawer.Screen name="Feed" component={Feed} />
+            <Drawer.Screen name="Article" component={Article} />
+        </Drawer.Navigator>
+    );
 }
-
-const Home = props => {
-    return <Tab.Navigator>
-        <Tab.Screen name="Messages" component={Messages} />
-        <Tab.Screen name="Feed" component={Feed} />
-    </Tab.Navigator>
-}
-
 function App() {
     return <NavigationContainer>
-        <Stack.Navigator>
-            <Stack.Screen
-                name="Home"
-                component={Home}
-                options={{ headerShown: false }}
-            />
-            <Stack.Screen name="Settings" component={Settings} />
-        </Stack.Navigator>
+        <MyDrawer />
     </NavigationContainer>
 
 }
 
 export default App;
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-});
